@@ -9,10 +9,11 @@ import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
+import Button from '@material-ui/core/Button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import { ChromePicker } from 'react-color';
 
-
-const drawerWidth = 500;
+const drawerWidth = 400;
 
 const styles = theme => ({
     root: {
@@ -108,7 +109,7 @@ const styles = theme => ({
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" color="inherit" noWrap>
-              Persistent drawer
+              Create Your Palette
             </Typography>
           </Toolbar>
         </AppBar>
@@ -127,6 +128,17 @@ const styles = theme => ({
             </IconButton>
           </div>
           <Divider />
+          <Typography variant="h4">Design Your Palette</Typography>
+          <div>
+            <Button variant="contained" color="secondary">Clear Palette</Button>
+            <Button variant="contained" color="primary">Random Color</Button>
+          </div>
+          
+          <ChromePicker 
+            color={"purple"}
+            onChangeComplete={(newColor)=> console.log(newColor)}
+          />
+          <Button variant="contained" color="primary">Add Color</Button>
         </Drawer>
         <main
           className={classNames(classes.content, {
@@ -134,7 +146,7 @@ const styles = theme => ({
           })}
         >
           <div className={classes.drawerHeader} />
-          
+         
         </main>
       </div>
     );
