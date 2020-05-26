@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import { withStyles } from '@material-ui/core/styles';
 import PaletteFormNav from './PaletteFormNav';
 import ColorPickerform from './ColorPickerForm';
-import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider';
@@ -17,24 +17,6 @@ const drawerWidth = 400;
 const styles = theme => ({
     root: {
       display: 'flex',
-    },
-    appBar: {
-      transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-    },
-    appBarShift: {
-      width: `calc(100% - ${drawerWidth}px)`,
-      marginLeft: drawerWidth,
-      transition: theme.transitions.create(['margin', 'width'], {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-    },
-    menuButton: {
-      marginLeft: 12,
-      marginRight: 20,
     },
     hide: {
       display: 'none',
@@ -165,7 +147,6 @@ const styles = theme => ({
 
         <PaletteFormNav 
             open={open}
-            classes={classes}
             palettes={palettes}
             handleSubmit={this.handleSubmit}
             handleDrawerOpen={this.handleDrawerOpen}
