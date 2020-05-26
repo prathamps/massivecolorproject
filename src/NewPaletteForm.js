@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import PaletteFormNav from './PaletteFormNav';
+import ColorPickerform from './ColorPickerForm';
 import { withStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import Typography from '@material-ui/core/Typography'
@@ -9,8 +10,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import DraggableColorList from './DraggableColorList';
-import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator';
-import { ChromePicker } from 'react-color';
 import { arrayMove } from 'react-sortable-hoc';
 
 const drawerWidth = 400;
@@ -83,11 +82,9 @@ const styles = theme => ({
      super(props);
      this.state = {
        open: true,
-       currentColor: "teal",
-       newColorName: "",
        colors: this.props.palettes[0].colors
-     }
-     this.updateCurrentColor = this.updateCurrentColor.bind(this);
+     };
+    
      this.addNewColor = this.addNewColor.bind(this);
      this.handleChange = this.handleChange.bind(this);
      this.handleSubmit = this.handleSubmit.bind(this);
@@ -96,19 +93,6 @@ const styles = theme => ({
      this.addRandomColor = this.addRandomColor.bind(this);
    }
    
-   componentDidMount() {
-     ValidatorForm.addValidationRule('isColorNameUnique', value =>{
-       return this.state.colors.every(
-          ({ name }) => name.toLowerCase() !== value.toLowerCase()
-        )
-     });
-     
-     ValidatorForm.addValidationRule('isColorUnique', value =>{
-      return this.state.colors.every(
-         ({ color }) => color !== this.state.currentColor
-       )
-    });
-   }
 
     handleDrawerOpen = () => {
         this.setState({ open: true });
@@ -118,17 +102,8 @@ const styles = theme => ({
         this.setState({ open: false });
     };
 
-    updateCurrentColor(newColor) {
-      this.setState({
-        currentColor: newColor.hex
-      });
-    }
 
-    addNewColor() {
-      const newColor = {
-        color: this.state.currentColor,
-        name: this.state.newColorName  
-      }
+    addNewColor(newColor) {
       this.setState({
         colors: [...this.state.colors, newColor],
         newName: ""
@@ -182,7 +157,7 @@ const styles = theme => ({
   render() {
 
     const { classes, maxColors, palettes } = this.props;
-    const { open, currentColor, colors, newColorName } = this.state;
+    const { open, colors } = this.state;
     const paletteIsFull = colors.length >= maxColors;
 
     return (
@@ -217,8 +192,7 @@ const styles = theme => ({
               variant="contained" 
               color="secondary"
               onClick={this.clearColors}
-               
-               >
+            >
                  Clear Palette
             </Button>
             <Button 
@@ -230,29 +204,13 @@ const styles = theme => ({
                 Random Color
             </Button>
           </div>
-          
-          <ChromePicker 
-            color={currentColor}
-            onChangeComplete={this.updateCurrentColor}
+          {/* Color Picker Form */}
+          <ColorPickerform 
+              paletteIsFull={paletteIsFull}
+              addNewColor={this.addNewColor}
+              colors={colors}
           />
-          <ValidatorForm onSubmit={this.addNewColor}>
-            <TextValidator 
-               value={newColorName} 
-               name="newColorName"
-               onChange={this.handleChange}
-               validators={["required", "isColorNameUnique", "isColorUnique"]}
-               errorMessages={["Enter A Color Name", "Color Name Must Be Unique", "Color Already Used"]}
-            />
-            <Button 
-             variant="contained" 
-             color="primary"
-             type="submit"
-             disabled={paletteIsFull}
-             style={{backgroundColor: paletteIsFull ? "rgba(0, 0, 0, 0.26)" : currentColor}}
-             >
-               {paletteIsFull ? "Palette Full": "Add Color"}
-            </Button>
-          </ValidatorForm>
+
         </Drawer>
         <main
           className={classNames(classes.content, {
