@@ -85,8 +85,15 @@ import seedColors from './seedColors';
     addRandomColor() {
       //picks a random color from existing palettes
       const allColors = this.props.palettes.map(p => p.colors).flat();
-      var rand = Math.floor(Math.random() * allColors.length);
-      const randomColor = allColors[rand];
+      let rand;
+      let randomColor;
+      let isDuplicateColor = true;
+      while(isDuplicateColor){
+          rand = Math.floor(Math.random() * allColors.length);
+          randomColor = allColors[rand];
+          // eslint-disable-next-line
+          isDuplicateColor = this.state.colors.some(color => color.name === randomColor.name);
+      }
       this.setState({
         colors: [...this.state.colors,randomColor]
       })
